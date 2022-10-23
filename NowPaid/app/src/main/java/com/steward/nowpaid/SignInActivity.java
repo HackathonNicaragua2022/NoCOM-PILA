@@ -33,13 +33,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.steward.nowpaid.api.API;
+import com.steward.nowpaid.api.APIEvent;
+import com.steward.nowpaid.api.OnLoggingListener;
+import com.steward.nowpaid.api.OnObjectResponse;
 
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity implements APIEvent {
     TextInputEditText etEmail, etPassword, etName, etPhoneNumber;
     TextInputLayout layToken, layPassword, layName,layPhoneNumber;
     ImageView ivAccount;
@@ -56,8 +60,15 @@ public class SignInActivity extends AppCompatActivity {
                     try {
                         ivAccount.setImageURI(selectedImageUri);
                         String ext = getfileExtension(selectedImageUri);
-
-                    } catch (Exception e) {
+                        API.instance.requestUploadImage(getBaseContext().getContentResolver().openInputStream(selectedImageUri), ext, new OnObjectResponse() {
+                            @Override
+                            public void successfully(JSONObject res) {
+                                try {
+                                    imageID = res.getString("id") + "." + ext;
+                                } catch (Exception e) {}
+                            }
+                        });
+                    } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
@@ -79,7 +90,7 @@ public class SignInActivity extends AppCompatActivity {
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         layPhoneNumber = findViewById(R.id.layPhoneNumber);
         ivAccount = findViewById(R.id.AccountImage);
-        ArrayAdapter<String> adap = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"Test"});
+        ArrayAdapter<String> adap = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, Constants.locations);
         spLocation.setAdapter(adap);
         etPassword.setOnFocusChangeListener((view,b) -> {
             etPassword.setError(null);
@@ -128,7 +139,7 @@ public class SignInActivity extends AppCompatActivity {
             }
             secondStep = true;
         });
-
+        API.instance.reportEvents(this);
     }
 
     private void signin() {
@@ -154,10 +165,49 @@ public class SignInActivity extends AppCompatActivity {
             Toast.makeText(this, "Seleccione una localidad", Toast.LENGTH_SHORT).show();
             return;
         }
-        startActivity(new Intent(SignInActivity.this, NowPaidActivity.class));
-        finish();
+        API.instance.singin(etName.getText().toString(), etPhoneNumber.getText().toString(), imageID, Constants.getIndexLoc(spLocation.getText().toString()), cbProp.isChecked(), etEmail.getText().toString(), etPassword.getText().toString(), new OnObjectResponse() {
+            @Override
+            public void successfully(JSONObject result) {
+                runOnUiThread(() -> {
+                    try {
+                        if(result.getString("message").startsWith("user_exist")) {
+                            layToken.setError("Correo invalido");
+                            ((Button)findViewById(R.id.btnSignBack)).performClick();
+                            Toast.makeText(SignInActivity.this, "Ya existe una cuenta vinculada a este correo.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        API.instance.disposeEvent();
+                        Session.save(SignInActivity.this);
+                        startActivity(new Intent(SignInActivity.this, NowPaidActivity.class));
+                        finish();
+                    } catch (Exception e){
+                    }
+                });
+            }
+        });
     }
 
+    @Override
+    public void timeout() {
+        runOnUiThread(() -> {
+            final AlertDialog dialog = new AlertDialog.Builder(SignInActivity.this).create();
+            dialog.setTitle("Error al conectarse");
+            dialog.setMessage("Por favor revise su conexion a internet e intente de nuevo");
+            dialog.setCancelable(false);
+            dialog.setButton(AlertDialog.BUTTON_POSITIVE,"Aceptar",new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            dialog.show();
+        });
+    }
+
+    @Override
+    public void unautorized() {
+
+    }
     private String getfileExtension(Uri uri)
     {
         String extension;

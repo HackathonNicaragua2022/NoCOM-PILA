@@ -12,8 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.steward.nowpaid.api.API;
+import com.steward.nowpaid.api.APIEvent;
+import com.steward.nowpaid.api.OnLoggingListener;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements APIEvent {
     TextInputEditText etEmail,etPassword;
     TextInputLayout layToken, layPassword;
     
@@ -26,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         layPassword = findViewById(R.id.layPassword);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        API.instance.reportEvents(this);
         etPassword.setOnFocusChangeListener((view,b) -> {
             etPassword.setError(null);
         });
@@ -46,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
             login();
         });
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener((view) -> {
+            API.instance.disposeEvent();
             startActivity(new Intent(LoginActivity.this, SignInActivity.class));
             finish();
         });
@@ -74,7 +79,52 @@ public class LoginActivity extends AppCompatActivity {
             layToken.setError(null);
             return;
         }
-        startActivity(new Intent(LoginActivity.this, NowPaidActivity.class));
-        finish();
+        API.instance.login(etEmail.getText().toString(), etPassword.getText().toString(), new OnLoggingListener() {
+            @Override
+            public void sucessfully() {
+                runOnUiThread(() -> {
+                    API.instance.disposeEvent();
+                    Session.save(LoginActivity.this);
+                    startActivity(new Intent(LoginActivity.this, NowPaidActivity.class));
+                    finish();
+                });
+            }
+
+            @Override
+            public void error(final boolean email,final boolean password) {
+                runOnUiThread(() -> {
+                    if(email) {
+                        layToken.setError("Correo invalido");
+                        layPassword.setError(null);
+                    }
+                    if(password) {
+                        layPassword.setError("Contraseña invalida");
+                        layToken.setError(null);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void timeout() {
+        runOnUiThread(() -> {
+            final AlertDialog dialog = new AlertDialog.Builder(LoginActivity.this).create();
+            dialog.setTitle("Error al conectarse");
+            dialog.setMessage("Por favor revise su conexion a internet e intente de nuevo");
+            dialog.setCancelable(false);
+            dialog.setButton(AlertDialog.BUTTON_POSITIVE,"Aceptar",new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            dialog.show();
+        });
+    }
+
+    @Override
+    public void unautorized() {
+
     }
 }
