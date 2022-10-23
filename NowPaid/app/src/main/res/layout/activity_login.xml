@@ -92,7 +92,7 @@
 				android:layout_gravity="center"
 				android:layout_marginTop="20dp"
 				android:text="¿Has olvidado tu contraseña?"
-				android:textColor="@color/purple_700" />
+				android:textColor="@color/teal_700" />
 		</LinearLayout>
 	</com.google.android.material.card.MaterialCardView>
 </LinearLayout>

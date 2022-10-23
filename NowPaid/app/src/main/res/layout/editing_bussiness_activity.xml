@@ -176,7 +176,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
-        app:backgroundTint="#a0a"
+        app:backgroundTint="@color/teal_200"
         app:rippleColor="@color/white"
         app:fabSize="normal"
         android:id="@+id/btnSaveBuss"
