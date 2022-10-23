@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Steward/Documents/GitHub/NoCOM-PILA/NowPaid/app/src/main/res/layout/activity_login.xml" value="0.32326529353919153" />
         <entry key="..\:/Users/Steward/Documents/GitHub/NoCOM-PILA/NowPaid/app/src/main/res/layout/activity_now_paid.xml" value="0.26197916666666665" />
+        <entry key="..\:/Users/Steward/Documents/GitHub/NoCOM-PILA/NowPaid/app/src/main/res/layout/activity_signin.xml" value="0.32326529353919153" />
         <entry key="..\:/Users/Steward/Documents/GitHub/NoCOM-PILA/NowPaid/app/src/main/res/layout/splash_screen.xml" value="0.24489794965090267" />
         <entry key="..\:/Users/Steward/Documents/GitHub/NoCOM-PILA/NowPaid/app/src/main/res/menu/main.xml" value="0.26197916666666665" />
       </map>

@@ -15,6 +15,13 @@
         <activity
             android:name=".NowPaidActivity"
             android:exported="false" />
+        <activity android:name=".SignInActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
+
+        <activity android:name=".LoginActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".SplashScreen"

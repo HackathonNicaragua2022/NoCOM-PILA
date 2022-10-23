@@ -30,7 +30,7 @@ public class SplashScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen);
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashScreen.this, NowPaidActivity.class));
+            startActivity(new Intent(SplashScreen.this, LoginActivity.class));
             finish();
             CustomIntent.customType(SplashScreen.this,"fadein-to-fadeout");
         }, 2000);

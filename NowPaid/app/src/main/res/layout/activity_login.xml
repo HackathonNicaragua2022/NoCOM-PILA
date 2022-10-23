@@ -1,0 +1,98 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:orientation="vertical">
+
+	<com.google.android.material.card.MaterialCardView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="10dp"
+		app:cardElevation="10dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="30dp">
+
+			<ImageView
+				android:layout_width="60dp"
+				android:layout_height="60dp"
+				android:layout_gravity="center"
+				android:src="@drawable/ic_launcher" />
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:text="Iniciar Sesion"
+				android:textColor="#000"
+				android:textSize="32dp"
+				android:textStyle="bold" />
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/layEmail"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="32dp"
+				android:hint="Correo electronico"
+				app:errorEnabled="true"
+				app:startIconDrawable="@drawable/ic_account">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/etEmail"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="textEmailAddress" />
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/layPassword"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:hint="Contraseña"
+				app:endIconMode="password_toggle"
+				app:errorEnabled="true"
+				app:startIconDrawable="@drawable/ic_lock">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/etPassword"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="textPassword" />
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<Button
+				android:id="@+id/btnLogin"
+				style="@style/Widget.AppCompat.Button.Colored"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:text="Iniciar Sesion"
+				android:textColor="#FFFFFF" />
+
+			<Button
+				android:id="@+id/btnSignIn"
+				style="@style/Widget.AppCompat.Button.Colored"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:text="Registrarse"
+				android:textColor="#FFFFFF" />
+
+			<TextView
+				android:id="@+id/tvForget"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:layout_marginTop="20dp"
+				android:text="¿Has olvidado tu contraseña?"
+				android:textColor="@color/purple_700" />
+		</LinearLayout>
+	</com.google.android.material.card.MaterialCardView>
+</LinearLayout>
