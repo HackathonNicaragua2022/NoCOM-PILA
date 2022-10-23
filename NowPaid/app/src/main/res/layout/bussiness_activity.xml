@@ -1,0 +1,231 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="Nombre del negocio"
+                android:id="@+id/tvBName"
+                android:textSize="21sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="Informacion"
+                android:id="@+id/tvBInfo"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="Productos"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layProducts">
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="Imagenes"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="6dp"
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/imageSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    app:sliderAnimationDuration="600"
+                    app:sliderAutoCycleDirection="back_and_forth"
+                    app:sliderAutoCycleEnabled="true"
+                    app:sliderIndicatorAnimationDuration="600"
+                    app:sliderIndicatorGravity="center_horizontal|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderIndicatorPadding="3dp"
+                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorSelectedColor="#5A5A5A"
+                    app:sliderIndicatorUnselectedColor="#FFF" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="Ubicacion y contacto"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="6dp"
+                    android:layout_margin="5dp"
+                    android:id="@+id/btnUbication"
+                    android:layout_marginBottom="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:padding="4dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:src="@drawable/google_maps"
+                            android:layout_width="90dp"
+                            android:layout_height="80dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Google Maps"
+                            android:textColor="#000000"
+                            android:textSize="13sp"
+                            android:layout_gravity="left"
+                            android:layout_marginTop="10dp"
+                            />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="6dp"
+                    android:layout_margin="5dp"
+                    android:id="@+id/btnWhatsapp"
+                    android:layout_marginBottom="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:padding="4dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:src="@drawable/whatsapp"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Whatsapp"
+                            android:id="@+id/tvName"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:layout_gravity="left"
+                            android:layout_marginTop="10dp"
+                            />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="20dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Calificaciones y opiniones"
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"/>
+
+                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                        android:rating="3.5"
+                        android:id="@+id/mrbRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:mrb_progressTint="#ffffff00"
+                        app:mrb_secondaryProgressTint="#ffffff00"
+                        android:isIndicator="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        style="@style/Widget.MaterialRatingBar.RatingBar" />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="3.5"
+                    android:textSize="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="20dp"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="60dp"
+                    android:layout_marginTop="20dp"
+                    app:backgroundTint="#f0f"
+                    app:fabSize="normal"
+                    android:id="@+id/btnRate"
+                    android:tooltipText="Hacer Reseña"
+                    />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:id="@+id/lvReviews"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.steward.nowpaid">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    
+    <!-- Always include this permission -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Include only if your app benefits from precise location access. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -16,26 +20,41 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.NowPaid">
 
-        <activity
-            android:name=".NowPaidActivity"
-            android:exported="false" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_apikey" />
+
+        <activity android:name=".NowPaidMapRadar"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".NowPaidActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".SignInActivity"
-        android:exported="false"
-        android:screenOrientation="portrait"/>
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".SplashScreen"
+        <activity android:name=".BussinessActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".EditBussinessActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".SplashScreen"
             android:exported="true"
-            android:theme="@style/Theme.NowPaid.NoActionBar" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

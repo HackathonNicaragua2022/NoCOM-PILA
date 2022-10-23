@@ -11,7 +11,9 @@ import cors from 'cors';
 import fs from "fs";
 import formidable from "formidable";
 
-import { beginDatabase, endDatabase } from './database.js';
+import { connectMongoDB } from './database.js';
+import {User} from './models/user.js';
+import {Bussiness} from './models/bussiness.js';
 
 import { Strategy } from "passport-local";
 import { v4 as uuid } from "uuid";
@@ -31,8 +33,7 @@ const UploadImageFile = (form, req) =>
     });
   });
 
-
-  const getRating = (buss) => {
+const getRating = (buss) => {
   if (buss.ratings.length === 0) {
     return 5;
   }
@@ -52,11 +53,8 @@ const app = express();
     new Strategy(
       { usernameField: "email", passwordField: "password" },
       async (username, password, done) => {
-        const db = beginDatabase();
         try {
-          let user = db.users.find((u) => {
-            return u.email === username;
-          });
+          let user = await User.findOne({email: username});
           if (user) {
             if (user.password === password) {
               return done(null, {
@@ -83,16 +81,11 @@ const app = express();
       { usernameField: "email", passwordField: "password" },
       async (username, password, done) => {
         try {
-          const db = beginDatabase();
-          if (
-            db.users.find((u) => {
-              return u.email === username;
-            }) != undefined
+          if (await User.findOne({email: username}) != undefined
           ) {
             return done(null, false, { message: "user_exist" });
           }
-          db.users.push({
-            id: uuid(),
+          const user = new User({
             name: "",
             phone: "",
             location: 0,
@@ -100,10 +93,10 @@ const app = express();
             password: password,
             property: false,
             image: ''
-          });
-          endDatabase(db);
+          })
+          await user.save();
           return done(null, {
-            id: db.users[db.users.length - 1].id
+            id: user._id
           });
         } catch (err) {
           console.log("Server Error: " + err);
@@ -121,8 +114,7 @@ const app = express();
   passport.deserializeUser(async (id, done) => {
     // Almacenar sesion
     try {
-      const db = beginDatabase();
-      let user = db.users.find((u) => { return u.id === id; });
+      let user = await User.findById(id);
       if (user) {
         delete user.password;
         done(null, user);
@@ -188,16 +180,13 @@ app.post("/signin",(req, res, next) => {
       if (!user) {
         return res.status(200).send(info);
       }
-      const db = beginDatabase();
-      let user_ = db.users.find((u) => {
-        return u.id === user.id;
-      });
+      const user_ = await User.findById(user.id);
       user_.name = req.body.name;
       user_.property = req.body.property;
       user_.location = req.body.location;
       user_.phone = req.body.phone;
       user_.image = req.body.image;
-      endDatabase(db);
+      await user_.save();
       req.logIn(user, function (err) {
         if (err) {
           console.log(err);
@@ -212,66 +201,46 @@ app.post("/signin",(req, res, next) => {
     })(req, res, next);
   });
 
-app.post("/rate-buss", isAuthenticated,(req, res) => {
-    let db = beginDatabase();
-    for(let i = 0; i < db.bussiness.length; i++) {
-        if(db.bussiness[i].id === req.body.id) {
-            db.bussiness[i].ratings.push({
-                user: req.user.id,
-                name: req.user.name,
-                text: req.body.text,
-                stars: req.body.stars
-            });
-            break;
-        }
-    }
-    endDatabase(db);
+app.post("/rate-buss", isAuthenticated, async (req, res) => {
+  const buss = await Bussiness.findById(req.body.id);
+  buss.ratings.push({
+    user: req.user._id,
+    name: req.user.name,
+    text: req.body.text,
+    stars: req.body.stars
+});
     res.status(200).send({});
 });
 
-app.post("/publish-buss",isAuthenticated,(req, res) => {
-    let db = beginDatabase();
-    db.bussiness.push({
-        id: uuid(),
-        user: req.user.id,
+app.post("/publish-buss",isAuthenticated,async (req, res) => {
+    const buss = new Bussiness({
         name: req.body.name,
+        user: req.user._id,
         category: req.body.category,
-        google_map: req.body.google_map,
+        google_maps: req.body.google_maps,
         images: req.body.images,
-        menu: req.body.menu,
         icon: req.body.icon,
-        visited: 0,
-        ratings: []
+        menu: req.body.menu,
+        visited: 0
     });
-    endDatabase(db);
+    await buss.save();
     res.status(200).send({});
 });
 
-app.post("/edit-buss",isAuthenticated,(req, res) => {
-  let db = beginDatabase();
-  for(let i = 0;i < db.bussiness.length; i ++){
-    if(db.bussiness[i].id === req.body.id) {
-      db.bussiness[i].name = req.body.name;
-      db.bussiness[i].category = req.body.category;
-      db.bussiness[i].google_map = req.body.google_map;
-      db.bussiness[i].images = req.body.images;
-      db.bussiness[i].menu = req.body.menu;
-      db.bussiness[i].icon = req.body.icon;
-    }
-  }
-  endDatabase(db);
+app.post("/edit-buss",isAuthenticated, async (req, res) => {
+  const buss = await Bussiness.findById(req.body.id);
+  buss.name = req.body.name;
+  buss.category = req.body.category;
+  buss.google_maps = req.body.google_maps;
+  buss.images = req.body.images;
+  buss.menu = req.body.menu;
+  buss.icon = req.body.icon;
+  await buss.save();
   res.status(200).send({});
 });
 
-app.get("/delete-buss",isAuthenticated, (req, res) => {
-  let db = beginDatabase();
-  for(let i = 0; i < db.bussiness.length; i++) {
-      if(db.bussiness[i].id === req.body.id) {
-        db.bussiness.splice(i, 1);
-        break;
-      }
-  }
-  endDatabase(db);
+app.get("/delete-buss",isAuthenticated,async (req, res) => {
+  await Bussiness.findByIdAndDelete(req.body.id);
   res.status(200).send({});
 });
 
@@ -279,45 +248,39 @@ app.get("/get-user-info",isAuthenticated, (req, res) => {
   res.status(200).send(req.user);
 });
 
-app.get("/get-list-buss",isAuthenticated, (req, res) => {
+app.get("/get-list-buss",isAuthenticated,async (req, res) => {
   let dest = [];
-  let db = beginDatabase();
-  for(let i = 0; i < db.bussiness.length; i++) {
-    let buss = db.bussiness[i];
+  const buss = await Bussiness.find();
+  for(let i in buss) {
     dest.push({
-      id: buss.id,
-      user: buss.user,
-      name: buss.name,
-      category: buss.category,
-      icon: buss.icon,
-      visited: buss.visited,
-      rating: getRating(buss)
+      id: buss[i]._id,
+      user: buss[i].user,
+      name: buss[i].name,
+      category: buss[i].category,
+      icon: buss[i].icon,
+      visited: buss[i].visited,
+      rating: getRating(buss[i])
     });
   }
   res.status(200).send(dest);
 });
 
-app.post("/get-details-buss", isAuthenticated, (req, res) => {
-  let db = beginDatabase();
-  for(let i = 0; i < db.bussiness.length; i++) {
-      if(db.bussiness[i].id === req.body.id) {
-          let {name,user,category,icon,images,ratings,google_map,menu} = db.bussiness[i];
-          let prop = db.users.find(u => { return u.id === user; });
-          res.status(200).send({
-            name,
-            property_name: prop.name,
-            property_phone: prop.phone,
-            category,
-            icon,
-            images,
-            rating: getRating(db.bussiness[i]),
-            ratings,
-            google_map,
-            menu
-          });
-          return;
-      }
-  }
+app.post("/get-details-buss", isAuthenticated, async (req, res) => {
+  const buss = await Bussiness.findById(req.body.id);
+  let {name,user,category,icon,images,ratings,google_maps,menu} = buss;
+  let prop = await User.findById(user);
+  res.status(200).send({
+    name,
+    property_name: prop.name,
+    property_phone: prop.phone,
+    category,
+    icon,
+    images,
+    rating: getRating(buss),
+    ratings,
+    google_maps,
+    menu
+  });
 });
 
 // check autentication status
@@ -354,6 +317,13 @@ app.post("/upload-image", async (req, res) => {
   res.status(200).send({ id });
 });
 
-app.listen(port,host,() => {
+(async () => {
+  if(!fs.existsSync("./uploads")) {
+    fs.mkdirSync("./uploads");
+  }
+  await connectMongoDB();
+  app.listen(port,host,() => {
     console.log("Server running\nEndpoint: http://"+host+":"+port);
 });
+})();
+

@@ -1,14 +1,5 @@
-import fs from "fs";
+import mongoose from 'mongoose';
 
-const beginDatabase = () => {
-  if (fs.existsSync("./database.json") === false) {
-    fs.writeFileSync("./database.json", JSON.stringify({bussiness:[], users:[]}));
-  }
-  return JSON.parse(fs.readFileSync("./database.json", { encoding: "utf-8" }));
-};
-
-const endDatabase = (db) => {
-  fs.writeFileSync("./database.json", JSON.stringify(db));
-};
-
-export { beginDatabase, endDatabase };
+export const connectMongoDB = async () => {
+  await mongoose.connect('mongodb://localhost:27017/nowpaidb', { useNewUrlParser: true , useUnifiedTopology: true});
+}

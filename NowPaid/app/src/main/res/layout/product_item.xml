@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+
+	<com.google.android.material.card.MaterialCardView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:cardElevation="6dp"
+		android:layout_margin="5dp"
+		android:layout_marginBottom="8dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="155dp"
+			android:padding="4dp"
+			android:orientation="vertical">
+
+			<ImageView
+				android:src="@drawable/no_image"
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+				android:id="@+id/ivCategoryImage"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Text"
+				android:id="@+id/tvName"
+				android:textColor="#000000"
+				android:textSize="14sp"
+				android:layout_gravity="left"
+				android:layout_marginTop="10dp"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Precio"
+				android:id="@+id/tvPrice"
+				android:textColor="#000000"
+				android:textSize="12sp"
+				android:layout_gravity="right"
+				/>
+
+		</LinearLayout>
+	</com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
+
